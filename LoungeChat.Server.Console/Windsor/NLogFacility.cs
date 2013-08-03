@@ -16,7 +16,7 @@
 
 #endregion
 
-namespace LoungeChat.Server.Windsor {
+namespace LoungeChat.Server.Console.Windsor {
     using Castle.Facilities.Logging;
     using Castle.MicroKernel.Facilities;
 
@@ -25,6 +25,13 @@ namespace LoungeChat.Server.Windsor {
     using NLog.Targets;
 
     public class NLogFacility : AbstractFacility {
+        protected override void Init() {
+            Configure();
+            Kernel.AddFacility<LoggingFacility>(
+                f => f.LogUsing(LoggerImplementation.ExtendedNLog)
+                      .ConfiguredExternally());
+        }
+
         private void Configure() {
             var config = new LoggingConfiguration();
             var consoleTarget = new ColoredConsoleTarget {
@@ -36,13 +43,6 @@ namespace LoungeChat.Server.Windsor {
 
             // UGH GLOBALS
             LogManager.Configuration = config;
-        }
-
-        protected override void Init() {
-            Configure();
-            Kernel.AddFacility<LoggingFacility>(
-                f => f.LogUsing(LoggerImplementation.ExtendedNLog)
-                      .ConfiguredExternally());
         }
     }
 }

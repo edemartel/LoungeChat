@@ -16,37 +16,42 @@
 
 #endregion
 
-namespace LoungeChat.Server {
-    using Castle.Core.Logging;
+namespace LoungeChat.Server.Console {
+    using System;
+
     using Castle.Windsor;
     using Castle.Windsor.Installer;
 
-    public class EntryPoint {
-        private readonly IExtendedLogger _logger;
+    using Services;
 
-        public EntryPoint(IExtendedLogger logger) {
-            _logger = logger;
-        }
-
-        public void Run(string[] args) {
-            _logger.Info("Hello");
-        }
-
-        #region Bootstrapping
-
+    internal static class Program {
         private static IWindsorContainer Bootstrap() {
             var ioc = new WindsorContainer();
             ioc.Install(FromAssembly.This());
             return ioc;
         }
 
-        public static void Main(string[] args) {
-            using (var ioc = Bootstrap()) {
-                var self = ioc.Resolve<EntryPoint>();
-                self.Run(args);
+        private static void Run(IWindsorContainer ioc, string[] args) {
+            var server = ioc.Resolve<IServer>();
+            var ip = "127.0.0.1";
+            var port = 5222;
+
+            if (args.Length >= 1) {
+                ip = args[0];
             }
+
+            if (args.Length >= 2) {
+                port = Convert.ToInt32(args[1]);
+            }
+
+            server.BindTo(ip, port);
+            server.Start();
         }
 
-        #endregion
+        private static void Main(string[] args) {
+            using (var ioc = Bootstrap()) {
+                Run(ioc, args);
+            }
+        }
     }
 }

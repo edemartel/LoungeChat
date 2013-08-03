@@ -16,21 +16,21 @@
 
 #endregion
 
-namespace LoungeChat.Server.Windsor {
+namespace LoungeChat.Server.Console.Windsor {
     using Castle.MicroKernel.Registration;
     using Castle.MicroKernel.SubSystems.Configuration;
     using Castle.Windsor;
 
-    public class NLogInstaller : IWindsorInstaller {
+    using Services;
+
+    public class ServerInstaller : IWindsorInstaller {
         #region Implementation of IWindsorInstaller
 
-        /// <summary>
-        ///     Performs the installation in the <see cref="T:Castle.Windsor.IWindsorContainer" />.
-        /// </summary>
-        /// <param name="container">The container.</param>
-        /// <param name="store">The configuration store.</param>
         public void Install(IWindsorContainer container, IConfigurationStore store) {
-            container.AddFacility<NLogFacility>();
+            container.Register(
+                Classes.FromAssemblyContaining<IServer>()
+                       .Pick()
+                       .WithService.DefaultInterfaces());
         }
 
         #endregion

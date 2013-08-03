@@ -1,4 +1,17 @@
-﻿using System;
+﻿#region Apache License 2.0
+
+// Copyright 2013 Lounge<Chat> Team
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//   http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License. 
+
+#endregion
 
 #pragma warning disable 1591
 // ReSharper disable UnusedMember.Global
@@ -9,7 +22,11 @@
 // ReSharper disable InconsistentNaming
 
 // ReSharper disable once CheckNamespace
+
 namespace LoungeChat.Server.Annotations {
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+
     /// <summary>
     ///     Indicates that the value of the marked element could be <c>null</c> sometimes,
     ///     so the check for <c>null</c> is necessary before its usage
@@ -40,6 +57,8 @@ namespace LoungeChat.Server.Annotations {
     /// }
     /// </code>
     /// </example>
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", 
+        Justification = "Reviewed. Suppression is OK here.")]
     [AttributeUsage(
         AttributeTargets.Method | AttributeTargets.Parameter |
         AttributeTargets.Property | AttributeTargets.Delegate |
@@ -62,7 +81,7 @@ namespace LoungeChat.Server.Annotations {
     /// </code>
     /// </example>
     [AttributeUsage(
-        AttributeTargets.Constructor | AttributeTargets.Method,
+        AttributeTargets.Constructor | AttributeTargets.Method, 
         AllowMultiple = false, Inherited = true)]
     public sealed class StringFormatMethodAttribute : Attribute {
         /// <param name="formatParameterName">
@@ -321,7 +340,7 @@ namespace LoungeChat.Server.Annotations {
         }
 
         public UsedImplicitlyAttribute(
-            ImplicitUseKindFlags useKindFlags,
+            ImplicitUseKindFlags useKindFlags, 
             ImplicitUseTargetFlags targetFlags) {
             UseKindFlags = useKindFlags;
             TargetFlags = targetFlags;
@@ -351,7 +370,7 @@ namespace LoungeChat.Server.Annotations {
         }
 
         public MeansImplicitUseAttribute(
-            ImplicitUseKindFlags useKindFlags,
+            ImplicitUseKindFlags useKindFlags, 
             ImplicitUseTargetFlags targetFlags) {
             UseKindFlags = useKindFlags;
             TargetFlags = targetFlags;
@@ -366,22 +385,22 @@ namespace LoungeChat.Server.Annotations {
 
     [Flags]
     public enum ImplicitUseKindFlags {
-        Default = Access | Assign | InstantiatedWithFixedConstructorSignature,
+        Default = Access | Assign | InstantiatedWithFixedConstructorSignature, 
 
         /// <summary>Only entity marked with attribute considered used</summary>
-        Access = 1,
+        Access = 1, 
 
         /// <summary>Indicates implicit assignment to a member</summary>
-        Assign = 2,
+        Assign = 2, 
 
         /// <summary>
         ///     Indicates implicit instantiation of a type with fixed constructor signature.
         ///     That means any unused constructor parameters won't be reported as such.
         /// </summary>
-        InstantiatedWithFixedConstructorSignature = 4,
+        InstantiatedWithFixedConstructorSignature = 4, 
 
         /// <summary>Indicates implicit instantiation of a type</summary>
-        InstantiatedNoFixedConstructorSignature = 8,
+        InstantiatedNoFixedConstructorSignature = 8, 
     }
 
     /// <summary>
@@ -391,11 +410,11 @@ namespace LoungeChat.Server.Annotations {
     /// </summary>
     [Flags]
     public enum ImplicitUseTargetFlags {
-        Default = Itself,
-        Itself = 1,
+        Default = Itself, 
+        Itself = 1, 
 
         /// <summary>Members of entity marked with attribute are considered used</summary>
-        Members = 2,
+        Members = 2, 
 
         /// <summary>Entity marked with attribute and all its members considered used</summary>
         WithMembers = Itself | Members

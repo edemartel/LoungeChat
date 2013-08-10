@@ -17,25 +17,52 @@
 #endregion
 
 namespace LoungeChat.Server.Components {
-    using Castle.Core.Logging;
+    using System;
 
     using Services;
 
     public class Server : IServer {
-        private readonly IExtendedLogger _logger;
+        private readonly ILog _logger;
 
-        public Server(IExtendedLogger logger) {
+        public Server(ILog logger) {
             _logger = logger;
+        }
+
+        private void Test() {
+            throw new Exception("Abababa");
+        }
+
+        private void Test2() {
+            try {
+                Test();
+            } catch (Exception e) {
+                throw new Exception("blblblb", e);
+            }
         }
 
         #region Implementation of IServer
 
         public void BindTo(string ip, int port) {
-            _logger.Info(string.Format("BindTo({0}, {1})", ip, port));
+            _logger.Info("BindTo({0}, {1})", ip, port);
         }
 
         public void Start() {
+            _logger.Debug("Debug");
             _logger.Info("Start()");
+            _logger.Warning("Warning");
+            _logger.Error("Error");
+            _logger.Fatal("Fatal");
+            try {
+                Test();
+            } catch (Exception e) {
+                _logger.Error(e, "Exception1");
+            }
+            try {
+                Test2();
+            } catch (Exception e) {
+                _logger.Error(e, "Exception2");
+            }
+
         }
 
         #endregion

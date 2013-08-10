@@ -17,32 +17,43 @@
 #endregion
 
 namespace LoungeChat.Server.Console.Windsor {
-    using Castle.Facilities.Logging;
     using Castle.MicroKernel.Facilities;
+    using Castle.MicroKernel.Registration;
 
-    using NLog;
+    using Logging;
+
     using NLog.Config;
     using NLog.Targets;
 
-    public class NLogFacility : AbstractFacility {
+    using Services;
+
+    public sealed class NLogFacility : AbstractFacility {
         protected override void Init() {
             Configure();
-            Kernel.AddFacility<LoggingFacility>(
-                f => f.LogUsing(LoggerImplementation.ExtendedNLog)
-                      .ConfiguredExternally());
+
+            var factoryInstance = new LogFactory();
+            var resolver = new LogResolver(factoryInstance);
+            var factory = Component.For<ILogFactory>()
+                                   .Instance(factoryInstance);
+
+            Kernel.Register(factory);
+            Kernel.Resolver.AddSubResolver(resolver);
         }
 
         private void Configure() {
             var config = new LoggingConfiguration();
             var consoleTarget = new ColoredConsoleTarget {
-                Layout = @"${date:format=HH\:mm\:ss} ${logger} ${message}"
+                Layout =
+                    @"${date:format=HH\:mm\:ss}" +
+                    @" ${replace:searchFor=^LoungeChat[.]Server[.]?:replaceWith=:regex=true:inner=${logger}}" +
+                    @" ${message} ${onexception:inner=${newline}${exception:format=ToString,StackTrace}}"
             };
 
             config.AddTarget("console", consoleTarget);
-            config.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, consoleTarget));
+            config.LoggingRules.Add(new LoggingRule("*", NLog.LogLevel.Debug, consoleTarget));
 
             // UGH GLOBALS
-            LogManager.Configuration = config;
+            NLog.LogManager.Configuration = config;
         }
     }
 }

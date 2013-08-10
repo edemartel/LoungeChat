@@ -16,18 +16,15 @@
 
 #endregion
 
-namespace LoungeChat.Server.Console.Windsor {
-    using Castle.MicroKernel.Registration;
-    using Castle.MicroKernel.SubSystems.Configuration;
-    using Castle.Windsor;
+namespace LoungeChat.Server.Services {
+    using System;
+    using System.Diagnostics.Contracts;
 
-    public sealed class NLogInstaller : IWindsorInstaller {
-        #region Implementation of IWindsorInstaller
+    using Contracts;
 
-        public void Install(IWindsorContainer container, IConfigurationStore store) {
-            container.AddFacility<NLogFacility>();
-        }
-
-        #endregion
+    [ContractClass(typeof(ILogFactoryContracts))]
+    public interface ILogFactory {
+        ILog Create(Type type);
+        ILog Create(String name);
     }
 }

@@ -16,16 +16,20 @@
 
 #endregion
 
-namespace LoungeChat.Server.Console.Windsor {
-    using Castle.MicroKernel.Registration;
-    using Castle.MicroKernel.SubSystems.Configuration;
-    using Castle.Windsor;
+namespace LoungeChat.Server.Console.Logging {
+    using System;
 
-    public sealed class NLogInstaller : IWindsorInstaller {
-        #region Implementation of IWindsorInstaller
+    using Services;
 
-        public void Install(IWindsorContainer container, IConfigurationStore store) {
-            container.AddFacility<NLogFacility>();
+    public sealed class LogFactory : ILogFactory {
+        #region Implementation of ILogFactory
+
+        public ILog Create(Type type) {
+            return Create(type.FullName);
+        }
+
+        public ILog Create(string name) {
+            return new Log(name);
         }
 
         #endregion

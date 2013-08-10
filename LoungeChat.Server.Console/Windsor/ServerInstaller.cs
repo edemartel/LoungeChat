@@ -17,19 +17,27 @@
 #endregion
 
 namespace LoungeChat.Server.Console.Windsor {
+    using System;
+
     using Castle.MicroKernel.Registration;
     using Castle.MicroKernel.SubSystems.Configuration;
     using Castle.Windsor;
 
     using Services;
 
-    public class ServerInstaller : IWindsorInstaller {
+    public sealed class ServerInstaller : IWindsorInstaller {
+        private const string ComponentNamespace = "LoungeChat.Server.Components";
+
+        private bool IsServerComponent(Type type) {
+            return type.Namespace != null && type.Namespace.StartsWith(ComponentNamespace);
+        }
+
         #region Implementation of IWindsorInstaller
 
         public void Install(IWindsorContainer container, IConfigurationStore store) {
             container.Register(
                 Classes.FromAssemblyContaining<IServer>()
-                       .Pick()
+                       .Where(IsServerComponent)
                        .WithService.DefaultInterfaces());
         }
 

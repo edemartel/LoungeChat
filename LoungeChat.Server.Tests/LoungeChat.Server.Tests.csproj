@@ -56,6 +56,16 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LoungeChat.Server.Console\LoungeChat.Server.Console.csproj">
+      <Project>{aa9d14f8-8567-498c-adb0-68edd66ee427}</Project>
+      <Name>LoungeChat.Server.Console</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LoungeChat.Server\LoungeChat.Server.csproj">
+      <Project>{a13d4243-76bc-4733-8cd7-b4e6fcd105b4}</Project>
+      <Name>LoungeChat.Server</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
